@@ -11,8 +11,8 @@
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or 
- * implied. See the License for the specific language governing 
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
 
@@ -23,6 +23,7 @@ import java.io.Reader;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -33,13 +34,13 @@ import org.xml.sax.InputSource;
  * DOM framework within a <code>Provider</code> ensures that it can
  * be plugged in without any dependencies. This allows other parsers
  * to be swapped in should there be such a requirement.
- * 
+ *
  * @author Niall Gallagher
- * 
+ *
  * @see org.simpleframework.xml.stream.DocumentProvider
  */
 public class DocumentProvider implements Provider {
-   
+
    /**
     * This is the factory that is used to create DOM parsers.
     */
@@ -47,11 +48,11 @@ public class DocumentProvider implements Provider {
 
    /**
     * Constructor for the <code>DocumentProvider</code> object. This
-    * uses the default {@link DocumentBuilderFactory#newInstance()}.
+    * uses the default {@link DocumentBuilderFactory#newInstance()} and
+    * preconfigures the factory with "safe" defaults.
     */
    public DocumentProvider() {
-      factory = DocumentBuilderFactory.newInstance();
-      factory.setNamespaceAware(true);
+      this(safeDocumentBuilderFactory());
    }
 
    /**
@@ -61,47 +62,77 @@ public class DocumentProvider implements Provider {
    public DocumentProvider(DocumentBuilderFactory factory) {
       this.factory = factory;
    }
-   
+
    /**
     * This provides an <code>EventReader</code> that will read from
     * the specified input stream. When reading from an input stream
     * the character encoding should be taken from the XML prolog or
     * it should default to the UTF-8 character encoding.
-    * 
+    *
     * @param source this is the stream to read the document with
-    * 
+    *
     * @return this is used to return the event reader implementation
     */
    public EventReader provide(InputStream source) throws Exception {
       return provide(new InputSource(source));
    }
-   
+
    /**
     * This provides an <code>EventReader</code> that will read from
     * the specified reader. When reading from a reader the character
     * encoding should be the same as the source XML document.
-    * 
+    *
     * @param source this is the reader to read the document with
-    * 
+    *
     * @return this is used to return the event reader implementation
     */
    public EventReader provide(Reader source) throws Exception {
       return provide(new InputSource(source));
-   }   
-   
+   }
+
    /**
     * This provides an <code>EventReader</code> that will read from
     * the specified source. When reading from a source the character
     * encoding should be the same as the source XML document.
-    * 
+    *
     * @param source this is the source to read the document with
-    * 
+    *
     * @return this is used to return the event reader implementation
     */
    private EventReader provide(InputSource source) throws Exception {
-      DocumentBuilder builder = factory.newDocumentBuilder();       
+      DocumentBuilder builder = factory.newDocumentBuilder();
       Document document = builder.parse(source);
-      
-      return new DocumentReader(document);   
+
+      return new DocumentReader(document);
+   }
+
+   /**
+    * Set a feature on the {@link DocumentBuilderFactory} or pass-through if not supported.
+    */
+   private static void setFeature(DocumentBuilderFactory factory, String feature, boolean value) {
+      try {
+         factory.setFeature(feature, value);
+      } catch (ParserConfigurationException e) {
+         throw new RuntimeException("The required security feature is not supported by your XML parser: "
+            + feature, e);
+      }
+   }
+
+   /**
+    * @return Returns a "safe" {@link DocumentBuilderFactory} preconfigured to disable
+    * entity expansion and external DTD resolution.
+    */
+   public static DocumentBuilderFactory safeDocumentBuilderFactory() {
+      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+      setFeature(factory, "http://apache.org/xml/features/disallow-doctype-decl", true);
+      setFeature(factory, "http://xml.org/sax/features/external-general-entities", false);
+      setFeature(factory, "http://xml.org/sax/features/external-parameter-entities", false);
+      setFeature(factory, "http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+      factory.setXIncludeAware(false);
+      factory.setExpandEntityReferences(false);
+
+      factory.setNamespaceAware(true);
+      return factory;
    }
 }

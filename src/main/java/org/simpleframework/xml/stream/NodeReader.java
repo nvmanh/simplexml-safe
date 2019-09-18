@@ -32,7 +32,7 @@ package org.simpleframework.xml.stream;
  *
  * @author Niall Gallagher
  */ 
-class NodeReader {
+public class NodeReader {
 
    /**
     * This is used to collect the text between the element tags.

@@ -32,7 +32,7 @@ package org.simpleframework.xml.stream;
  *
  * @see org.simpleframework.xml.stream.EventReader
  */
-interface EventNode extends Iterable<Attribute> {
+public interface EventNode extends Iterable<Attribute> {
    
    /**
     * This is used to provide the line number the XML event was

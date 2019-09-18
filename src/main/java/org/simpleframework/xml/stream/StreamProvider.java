@@ -23,6 +23,8 @@ import java.io.Reader;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLResolver;
+import javax.xml.stream.XMLStreamException;
 
 /**
  * The <code>StreamProvider</code> object is used to provide event
@@ -52,10 +54,20 @@ public class StreamProvider implements Provider {
 
    /**
     * Constructor for the <code>StreamProvider</code> object. This constructor
-    * uses the default {@link XMLInputFactory#newInstance()}.
+    * uses the default {@link XMLInputFactory#newInstance()} and preconfigures the
+    * factory with safe defaults.
     */
    public StreamProvider() {
-      this(XMLInputFactory.newInstance());
+      this.factory = XMLInputFactory.newInstance();
+      this.factory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+      this.factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+      this.factory.setXMLResolver(new XMLResolver() {
+         @Override
+         public Object resolveEntity(String publicID, String systemID, String baseURI, String namespace)
+             throws XMLStreamException {
+            throw new XMLStreamException("Entity resolution disabled for default stream provider constructor.");
+         }
+      });
    }
 
    /**

@@ -27,7 +27,7 @@ package org.simpleframework.xml.stream;
  * 
  * @author Niall Gallagher
  */
-interface EventReader {
+public interface EventReader {
 
    /**
     * This is used to take the next node from the document. This will
