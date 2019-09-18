@@ -18,7 +18,6 @@ allprojects {
   dependencies {
     api 'stax:stax-api:1.0.1'
     api 'stax:stax:1.2.0'
-    api 'xpp3:xpp3:1.1.3.3'
 
     testImplementation "junit:junit:3.8.1"
   }

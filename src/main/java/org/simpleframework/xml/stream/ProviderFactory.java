@@ -27,7 +27,7 @@ package org.simpleframework.xml.stream;
  * default suits most Java profiles as it is a very common parser.
  * 
  * @author Niall Gallagher
- * 
+ *
  * @see org.simpleframework.xml.stream.NodeBuilder
  */
 final class ProviderFactory {
@@ -44,11 +44,7 @@ final class ProviderFactory {
     */
    public static Provider getInstance() {
       try {
-         try {
-            return new StreamProvider();
-         } catch(Throwable e) {
-            return new PullProvider();
-         }
+         return new StreamProvider();
       } catch(Throwable e) {
          return new DocumentProvider();
       }
