@@ -35,21 +35,27 @@ import javax.xml.stream.XMLInputFactory;
  * 
  * @see org.simpleframework.xml.stream.StreamProvider
  */
-class StreamProvider implements Provider {
+public class StreamProvider implements Provider {
    
    /**
     * This is the factory that is used to create StAX parsers.
     */
    private final XMLInputFactory factory;
-   
+
    /**
-    * Constructor for the <code>StreamProvider</code> object. This
-    * is used to instantiate a parser factory that will be used to
-    * create parsers when requested. Instantiating the factory up
-    * front also checks that the framework is fully supported.
+    * Constructor for the <code>StreamProvider</code> object using
+    * an externally configured XML input factory.
+    */
+   public StreamProvider(XMLInputFactory factory) {
+      this.factory = factory;
+   }
+
+   /**
+    * Constructor for the <code>StreamProvider</code> object. This constructor
+    * uses the default {@link XMLInputFactory#newInstance()}.
     */
    public StreamProvider() {
-      this.factory = XMLInputFactory.newInstance();
+      this(XMLInputFactory.newInstance());
    }
 
    /**

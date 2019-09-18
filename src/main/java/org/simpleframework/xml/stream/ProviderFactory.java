@@ -31,22 +31,10 @@ package org.simpleframework.xml.stream;
  * @see org.simpleframework.xml.stream.NodeBuilder
  */
 final class ProviderFactory {
-
    /**
-    * This is used to acquire the <code>Provider</code> to be used 
-    * to process XML documents. The provider returned is determined
-    * by scanning the classpath for StAX dependencies, if they are
-    * available then the provider used is StAX otherwise it is DOM. 
-    * Scanning the classpath in this manner ensures the most suitable
-    * parser is used for the host platform.
-    * 
-    * @return this returns the provider that has been instantiate
+    * @return This returns the default provider.
     */
    public static Provider getInstance() {
-      try {
-         return new StreamProvider();
-      } catch(Throwable e) {
-         return new DocumentProvider();
-      }
+      return new StreamProvider();
    }
 }

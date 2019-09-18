@@ -34,7 +34,7 @@ import java.io.Reader;
  * 
  * @see org.simpleframework.xml.stream.NodeBuilder
  */
-interface Provider {
+public interface Provider {
 
    /**
     * This provides an <code>EventReader</code> that will read from

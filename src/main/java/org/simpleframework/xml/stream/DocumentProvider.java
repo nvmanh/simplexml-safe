@@ -38,22 +38,28 @@ import org.xml.sax.InputSource;
  * 
  * @see org.simpleframework.xml.stream.DocumentProvider
  */
-class DocumentProvider implements Provider {
+public class DocumentProvider implements Provider {
    
    /**
     * This is the factory that is used to create DOM parsers.
     */
    private final DocumentBuilderFactory factory;
-   
+
    /**
     * Constructor for the <code>DocumentProvider</code> object. This
-    * is used to instantiate a parser factory that will be used to
-    * create parsers when requested. Instantiating the factory up
-    * front also checks that the framework is fully supported.
+    * uses the default {@link DocumentBuilderFactory#newInstance()}.
     */
    public DocumentProvider() {
-      this.factory = DocumentBuilderFactory.newInstance();
-      this.factory.setNamespaceAware(true);
+      factory = DocumentBuilderFactory.newInstance();
+      factory.setNamespaceAware(true);
+   }
+
+   /**
+    * Constructor for the <code>DocumentProvider</code> object using
+    * an externally configured factory.
+    */
+   public DocumentProvider(DocumentBuilderFactory factory) {
+      this.factory = factory;
    }
    
    /**
