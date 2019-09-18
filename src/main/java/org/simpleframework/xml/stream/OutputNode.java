@@ -164,9 +164,7 @@ public interface OutputNode extends Node {
     * elements. If the value cannot be added an exception is thrown.
     * 
     * @param value this is the text value to add to this element
-    *
-    * @throws Exception thrown if the text value cannot be added
-    */ 
+    */
    void setValue(String value);
    
    /**
