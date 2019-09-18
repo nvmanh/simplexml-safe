@@ -16,9 +16,6 @@ allprojects {
   targetCompatibility = 1.8
 
   dependencies {
-    api 'stax:stax-api:1.0.1'
-    api 'stax:stax:1.2.0'
-
     testImplementation "junit:junit:3.8.1"
   }
 

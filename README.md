@@ -13,3 +13,4 @@ Changes are:
 * Any cruft not related to the core XML serialization/ parsing library
   has been removed.
 * Removed pull parser support and dependency.
+* Removed an explicit Stax dependency.
