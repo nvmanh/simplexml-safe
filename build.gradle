@@ -6,7 +6,7 @@ plugins {
 
 allprojects {
   group "com.carrotsearch.thirdparty"
-  version = '2.7.1-safe'
+  version = '2.7.1'
 
   repositories {
     mavenCentral()
@@ -59,5 +59,86 @@ allprojects {
       jdkName = '8'
       languageLevel = '1.8'
     }
+  }
+}
+
+allprojects {
+  apply plugin: 'maven-publish'
+  apply plugin: 'signing'
+
+  task sourcesJar(type: Jar, dependsOn: classes) {
+    archiveClassifier = 'sources'
+    from sourceSets.main.allJava
+  }
+
+  task javadocJar(type: Jar, dependsOn: javadoc) {
+    archiveClassifier = 'javadoc'
+    from javadoc.destinationDir
+  }
+
+  publishing {
+    repositories {
+      maven {
+        name = 'sonatype'
+        url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+        credentials {
+          if (project.hasProperty('nexusUsername')) {
+            username project.nexusUsername
+          }
+          if (project.hasProperty('nexusPassword')) {
+            password project.nexusPassword
+          }
+        }
+      }
+    }
+
+    publications {
+      maven(MavenPublication) {
+        from components.java
+        group = project.group
+        artifactId = project.archivesBaseName
+
+        artifact sourcesJar
+        artifact javadocJar
+
+        pom {
+          name = "Simple XML (safe)"
+          description = "A fork of Niall Gallagher's simple-xml library with web-safe defaults"
+          url = 'https://github.com/dweiss/simplexml'
+          inceptionYear = "2019"
+          licenses {
+            license {
+              name = 'The Apache Software License, Version 2.0'
+              url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            }
+          }
+          organization {
+            name = "Carrot Search s.c."
+            url = "https://www.carrotsearch.com"
+          }
+          developers {
+            developer {
+              id = 'niallg'
+              name = 'Niall Gallagher'
+              email = 'niallg@users.sf.net'
+            }
+            developer {
+              id = 'dawid.weiss'
+              name = 'Dawid Weiss'
+              email = 'dawid.weiss@carrotsearch.com'
+            }
+          }
+          scm {
+            connection = 'scm:git:git@github.com:dweiss/simplexml.git'
+            developerConnection = 'scm:git:git@github.com:dweiss/simplexml.git'
+            url = 'https://github.com/dweiss/simplexml'
+          }
+        }
+      }
+    }
+  }
+
+  signing {
+    sign publishing.publications.maven
   }
 }
