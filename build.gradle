@@ -22,10 +22,6 @@ allprojects {
     api 'stax:stax:1.2.0'
     api 'xpp3:xpp3:1.1.3.3'
 
-    //compile 'org.codehaus.woodstox:stax2-api:3.1.4'
-    //compile "org.slf4j:slf4j-api:1.7.12"
-    //compile 'net.sf.kxml:kxml2:2.3.0'
-
     testImplementation "junit:junit:3.8.1"
   }
 
@@ -43,6 +39,7 @@ allprojects {
 
   test {
     maxParallelForks = (int) Math.max(Runtime.runtime.availableProcessors() / 2.0, 4.0)
+    systemProperty 'output', "${buildDir}/output"
   }
 
   javadoc {
