@@ -1,0 +1,71 @@
+
+plugins {
+  id 'java-library'
+  id 'idea'
+}
+
+def version = 
+
+allprojects {
+  group "com.carrotsearch.thirdparty"
+  version = '2.7.1-safe'
+
+  repositories {
+    mavenCentral()
+  }
+
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8
+
+  dependencies {
+    api 'stax:stax-api:1.0.1'
+    api 'stax:stax:1.2.0'
+    api 'xpp3:xpp3:1.1.3.3'
+
+    //compile 'org.codehaus.woodstox:stax2-api:3.1.4'
+    //compile "org.slf4j:slf4j-api:1.7.12"
+    //compile 'net.sf.kxml:kxml2:2.3.0'
+
+    testImplementation "junit:junit:3.8.1"
+  }
+
+  tasks.withType(JavaCompile) {
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    options.encoding = "UTF-8"
+  }
+
+  tasks.withType(Jar) {
+    manifest {
+      attributes("Implementation-Title": project.name,
+                 "Implementation-Version": "${project.version}")
+    }
+  }
+
+  test {
+    maxParallelForks = (int) Math.max(Runtime.runtime.availableProcessors() / 2.0, 4.0)
+  }
+
+  javadoc {
+    title = "${project.name} ${project.version} API Documentation"
+
+    if (JavaVersion.current().isJava9Compatible()) {
+      options.addBooleanOption('html5', true)
+      options.addStringOption('Xdoclint:all,-missing', '-noindex')
+    }
+
+    options.encoding = 'UTF-8'
+  }
+
+  idea {
+    module {
+      outputDir file('build/idea/classes/main')
+      testOutputDir file('build/idea/classes/test')
+      downloadSources = true
+    }
+
+    project {
+      jdkName = '8'
+      languageLevel = '1.8'
+    }
+  }
+}
