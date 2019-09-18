@@ -6,7 +6,7 @@ plugins {
 
 allprojects {
   group "com.carrotsearch.thirdparty"
-  version = '2.7.1'
+  version = '2.7.2-SNAPSHOT'
 
   repositories {
     mavenCentral()

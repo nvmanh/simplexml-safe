@@ -7,6 +7,11 @@
 This is a somewhat cleaned up and modernized fork of the original 
 [simple-xml](https://github.com/ngallagher/simplexml) library by Niall Gallagher.
 
+Dependency information for dependency systems (in compact format):
+```
+com.carrotsearch.thirdparty:simple-xml-safe:2.7.1
+```
+
 # Changes
 
 ## 2.7.1
