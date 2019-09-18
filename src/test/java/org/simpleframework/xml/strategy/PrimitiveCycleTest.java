@@ -180,6 +180,12 @@ public class PrimitiveCycleTest extends ValidationTestCase {
       assertEquals(entry.object.stringValue, "text value");
       assertEquals(entry.object.enumValue, TestEnum.TWO);
 
+      // Create unique objects for types with built-in value caches,
+      // otherwise they'll end up as references.
+      entry.object.booleanValue = new Boolean(entry.object.booleanValue);
+      entry.object.byteValue = new Byte(entry.object.byteValue);
+      entry.object.shortValue = new Short(entry.object.shortValue);
+
       StringWriter out = new StringWriter();
       persister.write(entry, out);
       String text = out.toString();
@@ -201,10 +207,10 @@ public class PrimitiveCycleTest extends ValidationTestCase {
       assertElementHasValue(text, "/test/primitive/float", "1234.56");       
       assertElementHasValue(text, "/test/primitive/long", "1234567");       
       assertElementHasValue(text, "/test/primitive/double", "1234567.89");
- 
-      assertElementHasValue(text, "/test/object/Boolean", "true");   
-      assertElementHasValue(text, "/test/object/Byte", "16");  
-      assertElementHasValue(text, "/test/object/Short", "120");       
+
+      assertElementHasValue(text, "/test/object/Boolean", "true");
+      assertElementHasValue(text, "/test/object/Byte", "16");
+      assertElementHasValue(text, "/test/object/Short", "120");
       assertElementHasValue(text, "/test/object/Integer", "1234");        
       assertElementHasValue(text, "/test/object/Float", "1234.56");       
       assertElementHasValue(text, "/test/object/Long", "1234567");       
