@@ -1,6 +1,6 @@
 # SimpleXML
 
-`simple-xml` is an XML serialization and deserialization framework for Java. 
+`simple-xml-safe` is an XML serialization and deserialization framework for Java. 
 
 # About this fork
 
