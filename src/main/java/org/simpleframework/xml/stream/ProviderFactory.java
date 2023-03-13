@@ -35,6 +35,15 @@ final class ProviderFactory {
     * @return This returns the default provider.
     */
    public static Provider getInstance() {
-      return new StreamProvider();
+      // return new StreamProvider();
+      try {
+         try {
+            return new StreamProvider();
+         } catch(Throwable e) {
+            return new PullProvider();
+         }
+      } catch(Throwable e) {
+         return new DocumentProvider();
+      }
    }
 }
